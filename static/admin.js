@@ -101,6 +101,8 @@ function renderBoard(players) {
       <td><span class="status-dot ${dot}"></span>${statusTxt}</td>
       <td class="muted">H1:${p.help1_count} · H2:${p.help2_count}</td>
       <td class="row" style="gap:6px">
+        <button class="btn ghost small" onclick="advancePlayer('${p.id}','${esc(p.nickname)}',false)" ${p.status === 'finished' ? 'disabled' : ''} title="Ohne Punkte zum nächsten Satz">Weiter 0 P.</button>
+        <button class="btn gold small" onclick="advancePlayer('${p.id}','${esc(p.nickname)}',true)" ${p.status === 'finished' ? 'disabled' : ''} title="Satz als perfekt werten (100%) und weiter">Weiter volle P.</button>
         <button class="btn ghost small" onclick="renamePlayer('${p.id}','${esc(p.nickname)}')">Umbenennen</button>
         <button class="btn danger small" onclick="kickPlayer('${p.id}','${esc(p.nickname)}')">Kick</button>
       </td>
@@ -123,6 +125,16 @@ window.renamePlayer = async (id, current) => {
   if (!name) return;
   const res = await adminPost("/api/admin/rename", { player_id: id, nickname: name });
   if (res.ok) { toast("Umbenannt."); refreshState(); }
+  else { const d = await res.json(); toast(d.detail || "Fehler"); }
+};
+
+window.advancePlayer = async (id, name, full) => {
+  const msg = full
+    ? `„${name}“ den aktuellen Satz mit VOLLER Punktzahl (100 %) gutschreiben und zum nächsten Satz?\n(Nur, wenn du die Übersetzung am Team-Bildschirm geprüft hast und sie stimmt.)`
+    : `„${name}“ OHNE Punkte (0 P.) zum nächsten Satz schieben?\n(Für Teams, die feststecken.)`;
+  if (!confirm(msg)) return;
+  const res = await adminPost("/api/admin/advance", { player_id: id, award_full: !!full });
+  if (res.ok) { toast(full ? "Volle Punkte vergeben, weiter." : "Ohne Punkte weitergeschoben."); refreshState(); }
   else { const d = await res.json(); toast(d.detail || "Fehler"); }
 };
 

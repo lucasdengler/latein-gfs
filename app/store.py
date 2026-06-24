@@ -260,6 +260,47 @@ class Store:
             self._save_player(p)
             return False
 
+    def admin_advance(self, player_id: str, award_full: bool = False) -> str | None:
+        """
+        Admin-Not-Knopf: Team zum nächsten Satz schieben, auch wenn der aktuelle
+        nicht von der KI bestanden wurde.
+          award_full=False -> übersprungen, 0 Punkte für den Satz.
+          award_full=True  -> Satz wird als perfekt (Qualität 100%) gewertet:
+                              volle Qualitätspunkte + Zeitbonus − evtl. Hilfe-Abzüge.
+        Gibt "advanced", "finished" oder None (nicht möglich) zurück.
+        """
+        with _lock:
+            p = self.players.get(player_id)
+            if not p or p["status"] != "playing":
+                return None
+            idx = p["current_sentence_index"]
+
+            if award_full:
+                rec = self._record(p["id"], idx)
+                elapsed = max(0.0, time.time() - p["sentence_started_at"])
+                rec["time_seconds"] = elapsed
+                rec["quality"] = 100
+                breakdown = config.compute_sentence_points(
+                    quality=100,
+                    seconds=elapsed,
+                    help1_used=rec["help1_used"],
+                    help2_questions=rec["help2_questions"],
+                    retries=rec["retries"],
+                )
+                rec["points"] = breakdown["points"]
+                self._save_record(rec)
+                self._recompute_totals(p)
+
+            if idx + 1 >= SENTENCE_COUNT:
+                p["status"] = "finished"
+                self._save_player(p)
+                return "finished"
+            p["current_sentence_index"] += 1
+            p["current_passed"] = False
+            p["sentence_started_at"] = time.time()
+            self._save_player(p)
+            return "advanced"
+
     # ----------------------------------------------------------- Admin
     def rename(self, player_id: str, new_name: str) -> bool:
         with _lock:

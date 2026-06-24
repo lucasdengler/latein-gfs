@@ -264,3 +264,29 @@ function renderEnd() {
 }
 
 loadState();
+
+// Leichter Hintergrund-Abgleich (alle 5s): erkennt, wenn der Admin das Team
+// weiterschiebt, kickt oder das Spiel beendet. Greift NICHT ins Tippen/Prüfen ein
+// – es wird nur neu gezeichnet, wenn sich Satznummer/Status tatsächlich ändern.
+// Dieser Aufruf nutzt KEINE KI (nur /api/state), kostet also kein Limit.
+setInterval(async () => {
+  if (!state) return;
+  try {
+    const res = await fetch("/api/state?token=" + encodeURIComponent(token));
+    if (res.status === 401) {
+      stopTimer();
+      alert("Deine Session wurde beendet (evtl. vom Admin entfernt).");
+      localStorage.removeItem("token");
+      window.location.href = "/";
+      return;
+    }
+    const fresh = await res.json();
+    const becameFinished = fresh.status === "finished" && state.status !== "finished";
+    const sentenceChanged = fresh.sentence && state.sentence &&
+                            fresh.sentence.number !== state.sentence.number;
+    if (becameFinished || sentenceChanged) {
+      state = fresh;
+      render();
+    }
+  } catch (e) { /* Netzwerk-Hänger ignorieren */ }
+}, 5000);

@@ -310,6 +310,20 @@ async def api_admin_kick(request: Request, payload: dict):
     return {"ok": True}
 
 
+@app.post("/api/admin/advance")
+async def api_admin_advance(request: Request, payload: dict):
+    """Not-Knopf: ein steckengebliebenes Team zum nächsten Satz schieben –
+    entweder ohne Punkte (award_full=False) oder mit voller Punktzahl (award_full=True)."""
+    require_admin(request)
+    award_full = bool(payload.get("award_full", False))
+    result = store.admin_advance(payload.get("player_id", ""), award_full)
+    if result is None:
+        raise HTTPException(status_code=404,
+                            detail="Team nicht gefunden oder bereits fertig.")
+    await notify_admins()
+    return {"ok": True, "finished": result == "finished"}
+
+
 @app.post("/api/admin/reset")
 async def api_admin_reset(request: Request):
     require_admin(request)
