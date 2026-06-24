@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Latein-GFS – Übersetzen</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <h1>🌋 Vesuv-Übersetzungswettbewerb</h1>
+    </div>
+
+    <!-- Kopfzeile: Spieler, Satznummer, Punkte, Timer -->
+    <div class="card">
+      <div class="row between">
+        <div>
+          <span class="pill" id="who">…</span>
+          <span class="pill" id="progress" style="background:var(--accent2)">Satz –/–</span>
+        </div>
+        <div class="row">
+          <div>
+            <div class="muted">Punkte</div>
+            <div class="timer" id="score">0</div>
+          </div>
+          <div>
+            <div class="muted">Zeit (Satz)</div>
+            <div class="timer" id="timer">0s</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spielbereich -->
+    <div id="gameArea">
+      <div class="card">
+        <div class="muted">Lateinischer Satz</div>
+        <div class="latin" id="latin">…</div>
+
+        <!-- Gratis-Tipp (z. B. Satz 2), ohne Punktabzug -->
+        <div class="tip hidden" id="freeTip"></div>
+
+        <label for="translation" style="margin-top:18px">Deine deutsche Übersetzung</label>
+        <textarea id="translation" placeholder="Tippe hier deine Übersetzung…"></textarea>
+
+        <div class="row" style="margin-top:14px">
+          <button class="btn gold" id="help1Btn">📖 Hilfe 1: Grammatik &amp; Vokabeln</button>
+          <button class="btn ghost" id="help2Btn">🤖 Hilfe 2: KI-Assistent</button>
+          <div class="spacer"></div>
+          <button class="btn primary" id="checkBtn">✓ Prüfen</button>
+        </div>
+        <p class="muted" id="penaltyHint"></p>
+
+        <!-- Feedback nach dem Prüfen -->
+        <div id="feedbackArea"></div>
+        <div class="row hidden" id="nextRow" style="margin-top:14px">
+          <button class="btn primary block" id="nextBtn">Weiter zum nächsten Satz →</button>
+        </div>
+      </div>
+
+      <!-- Hilfe 1 Panel -->
+      <div class="card hidden" id="help1Panel">
+        <h2>📖 Grammatik &amp; Vokabeln</h2>
+        <h3>Vokabeln</h3>
+        <ul class="help-list" id="vocabList"></ul>
+        <h3>Grammatik-Hinweise</h3>
+        <ul class="help-list" id="grammarList"></ul>
+      </div>
+
+      <!-- Hilfe 2 Panel: KI-Assistent -->
+      <div class="card hidden" id="help2Panel">
+        <h2>🤖 KI-Assistent <span class="muted" style="font-weight:400">(nur Vokabeln &amp; Grammatik – keine Übersetzungen!)</span></h2>
+        <div class="chat" id="chat"></div>
+        <div class="row" style="margin-top:10px">
+          <input type="text" id="chatInput" placeholder="z. B. Welche Form ist „regebat“?">
+          <button class="btn" id="chatSend">Fragen</button>
+        </div>
+        <p class="muted" id="chatHint"></p>
+      </div>
+    </div>
+
+    <!-- Endbildschirm -->
+    <div id="endArea" class="hidden">
+      <div class="card center">
+        <h2>🏁 Geschafft!</h2>
+        <p class="timer" id="finalScore" style="font-size:2.6rem">0 Punkte</p>
+        <p class="muted" id="finalMeta"></p>
+        <div class="tip" id="finalNote" style="text-align:left"></div>
+      </div>
+      <div class="card">
+        <h2>Rangliste</h2>
+        <table>
+          <thead><tr><th>#</th><th>Name</th><th>Punkte</th><th>Zeit</th></tr></thead>
+          <tbody id="finalBoard"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="/static/play.js"></script>
+</body>
+</html>

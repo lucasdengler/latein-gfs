@@ -1,0 +1,28 @@
+# Render.com Blueprint – verbinde dieses Repo unter https://dashboard.render.com
+# als "Blueprint", dann werden Service + Env-Vars automatisch angelegt.
+services:
+  - type: web
+    name: latein-gfs
+    runtime: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    # Single-Worker: In-Memory-State + WebSocket brauchen genau EINEN Prozess.
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false          # im Render-Dashboard eintragen (geheim)
+      - key: ADMIN_PASSWORD
+        sync: false          # im Render-Dashboard eintragen (geheim)
+      - key: PUBLIC_BASE_URL
+        sync: false          # z. B. https://latein-gfs.onrender.com (optional)
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: PYTHON_VERSION
+        value: "3.12.4"
+    # Optionales persistentes Volume (SQLite überlebt Neustarts/Deploys).
+    # Auf dem Free-Tier ggf. nicht verfügbar -> dann diesen Block entfernen.
+    # disk:
+    #   name: data
+    #   mountPath: /var/data
+    #   sizeGB: 1
+    # Wenn du das Volume nutzt, setze zusätzlich DB_PATH=/var/data/game.db

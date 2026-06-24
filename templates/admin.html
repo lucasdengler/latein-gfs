@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Latein-GFS – Admin</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="wrap wide">
+    <div class="brand">
+      <h1>🛠️ Admin-Panel</h1>
+      <p>Live-Rangliste · Spieler verwalten · Beitritts-QR</p>
+    </div>
+
+    <!-- Login -->
+    <div class="card" id="loginCard">
+      <h2>Admin-Login</h2>
+      <label for="pw">Passwort</label>
+      <input type="password" id="pw" placeholder="ADMIN_PASSWORD">
+      <p id="loginErr" class="feedback bad hidden"></p>
+      <div class="row" style="margin-top:12px">
+        <button class="btn primary" id="loginBtn">Anmelden</button>
+      </div>
+    </div>
+
+    <!-- Panel -->
+    <div id="panel" class="hidden">
+      <div class="row" style="align-items:flex-start">
+        <!-- QR + Link -->
+        <div class="card qr-box" style="flex:0 0 280px">
+          <h2>Beitreten</h2>
+          <img id="qr" src="/qr" alt="QR-Code">
+          <p class="join-link" id="joinLink">…</p>
+          <button class="btn ghost small" id="copyLink">Link kopieren</button>
+        </div>
+
+        <!-- Rangliste -->
+        <div class="card" style="flex:1; min-width:340px">
+          <div class="row between">
+            <h2 style="margin:0">Live-Rangliste <span class="status-dot on" id="liveDot"></span><span class="muted" id="liveTxt">live</span></h2>
+            <button class="btn danger small" id="resetBtn">Neue Runde / Punkte zurücksetzen</button>
+          </div>
+          <p class="muted" id="playerCount"></p>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th><th>Spieler</th><th>Satz</th><th>Punkte</th>
+                <th>Zeit</th><th>Status</th><th>Hilfen</th><th>Aktionen</th>
+              </tr>
+            </thead>
+            <tbody id="board"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="/static/admin.js"></script>
+</body>
+</html>
