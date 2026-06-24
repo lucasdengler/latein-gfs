@@ -5,12 +5,13 @@ Google-Gemini-Anbindung:
 
 Der API-Key wird ausschließlich aus der Umgebung gelesen (config.GEMINI_API_KEY).
 Alle Aufrufe sind in try/except gekapselt und liefern bei Fehlern sinnvolle
-Fallbacks zurück (z. B. wenn das Gratis-Limit kurzzeitig greift), sodass das
-Spiel auch bei API-Problemen nicht abstürzt – der Spieler kann einfach erneut
-„Prüfen“ klicken bzw. die Frage erneut stellen.
+Fallbacks zurück. Bei vorübergehender Überlastung (HTTP 503/429) versucht die
+App es automatisch erneut und weicht notfalls auf ein zweites Gratis-Modell aus,
+damit das Spiel auch bei vielen gleichzeitigen Anfragen flüssig läuft.
 """
 import json
 import re
+import time
 
 from . import config
 
@@ -28,6 +29,65 @@ def _get_client():
         from google import genai
         _client = genai.Client(api_key=config.GEMINI_API_KEY)
     return _client
+
+
+# ---------------------------------------------------------------------------
+# Robuster Aufruf mit Wiederholung + Modell-Ausweichliste
+# ---------------------------------------------------------------------------
+
+# Fehler-Kennungen, bei denen sich ein erneuter Versuch lohnt (Überlastung/Limit).
+_RETRYABLE = ("503", "UNAVAILABLE", "429", "RESOURCE_EXHAUSTED",
+              "overloaded", "high demand", "temporarily")
+
+
+def _is_retryable(exc: Exception) -> bool:
+    s = str(exc)
+    return any(tok in s for tok in _RETRYABLE)
+
+
+def _model_chain() -> list[str]:
+    """Primärmodell zuerst, danach ein Ausweichmodell (oft weniger ausgelastet)."""
+    chain = [config.GEMINI_MODEL, "gemini-2.0-flash"]
+    seen, out = set(), []
+    for m in chain:
+        if m and m not in seen:
+            seen.add(m)
+            out.append(m)
+    return out
+
+
+def _generate(system_instruction: str, contents, max_output_tokens: int,
+              temperature: float, json_mode: bool) -> str:
+    """
+    Ruft Gemini auf und gibt den Antworttext zurück.
+    Bei vorübergehenden Fehlern (503/429) bis zu 2 Versuche pro Modell mit kurzer
+    Pause, danach das nächste Modell aus der Ausweichliste. Nicht-vorübergehende
+    Fehler (z. B. ungültiger Key) werden sofort weitergereicht.
+    """
+    from google.genai import types
+    client = _get_client()
+    cfg = types.GenerateContentConfig(
+        system_instruction=system_instruction,
+        temperature=temperature,
+        max_output_tokens=max_output_tokens,
+        response_mime_type="application/json" if json_mode else None,
+    )
+    backoff = [1.0, 2.5]  # Sekunden zwischen den Versuchen
+    last_exc: Exception | None = None
+    for model in _model_chain():
+        for attempt in range(len(backoff)):
+            try:
+                resp = client.models.generate_content(
+                    model=model, contents=contents, config=cfg)
+                return resp.text or ""
+            except Exception as exc:  # noqa: BLE001
+                last_exc = exc
+                if _is_retryable(exc):
+                    time.sleep(backoff[attempt])
+                    continue  # nochmal mit demselben Modell
+                raise         # echter Fehler -> nicht weiter probieren
+        # Modell blieb überlastet -> nächstes Modell in der Liste versuchen
+    raise last_exc if last_exc else RuntimeError("KI-Aufruf fehlgeschlagen.")
 
 
 # ---------------------------------------------------------------------------
@@ -52,12 +112,10 @@ def _extract_json(text: str) -> dict | None:
     """Versucht robust, ein JSON-Objekt aus dem Modell-Output zu ziehen."""
     if not text:
         return None
-    # Direkter Versuch.
     try:
         return json.loads(text.strip())
     except json.JSONDecodeError:
         pass
-    # Erstes {...}-Objekt im Text suchen (greedy bis zur letzten }).
     match = re.search(r"\{.*\}", text, re.DOTALL)
     if match:
         try:
@@ -78,35 +136,27 @@ def evaluate_translation(latin: str, solution: str, student: str) -> dict:
         f"Schülerübersetzung:\n{student}"
     )
     try:
-        from google.genai import types
-        client = _get_client()
-        resp = client.models.generate_content(
-            model=config.GEMINI_MODEL,
+        raw = _generate(
+            system_instruction=EVAL_SYSTEM_PROMPT,
             contents=user_msg,
-            config=types.GenerateContentConfig(
-                system_instruction=EVAL_SYSTEM_PROMPT,
-                temperature=0,
-                max_output_tokens=400,
-                response_mime_type="application/json",  # erzwingt sauberes JSON
-            ),
+            max_output_tokens=400,
+            temperature=0,
+            json_mode=True,
         )
-        raw = resp.text or ""
         data = _extract_json(raw)
         if not data or "quality" not in data:
             raise ValueError(f"Konnte JSON nicht parsen: {raw!r}")
 
-        quality = int(data.get("quality", 0))
-        quality = max(0, min(100, quality))
-        # Sicherheitsnetz: passed konsistent zur Schwelle erzwingen.
+        quality = max(0, min(100, int(data.get("quality", 0))))
         passed = quality >= config.PASS_THRESHOLD
         feedback = str(data.get("feedback", "")).strip() or "Bewertung abgeschlossen."
         return {"quality": quality, "passed": passed, "feedback": feedback, "error": False}
-    except Exception as exc:  # noqa: BLE001 - alle Fehler abfangen, Spiel darf nicht abstürzen
+    except Exception as exc:  # noqa: BLE001 - Spiel darf nicht abstürzen
         print(f"[ai.evaluate_translation] Fehler: {exc}")
         return {
             "quality": 0,
             "passed": False,
-            "feedback": "Bewertung gerade nicht möglich, bitte erneut „Prüfen“ klicken.",
+            "feedback": "Bewertung gerade nicht möglich (KI ausgelastet) – bitte erneut „Prüfen“ klicken.",
             "error": True,
         }
 
@@ -146,8 +196,6 @@ def ask_assistant(current_sentence: str, history: list[dict], question: str) -> 
     """
     try:
         from google.genai import types
-        client = _get_client()
-
         # Gemini erwartet die Rolle "model" (nicht "assistant").
         contents = []
         for m in history:
@@ -156,20 +204,17 @@ def ask_assistant(current_sentence: str, history: list[dict], question: str) -> 
                 contents.append(types.Content(role=role, parts=[types.Part(text=m["content"])]))
         contents.append(types.Content(role="user", parts=[types.Part(text=question)]))
 
-        resp = client.models.generate_content(
-            model=config.GEMINI_MODEL,
+        reply = _generate(
+            system_instruction=assistant_system_prompt(current_sentence),
             contents=contents,
-            config=types.GenerateContentConfig(
-                system_instruction=assistant_system_prompt(current_sentence),
-                temperature=0.3,
-                max_output_tokens=500,
-            ),
-        )
-        reply = (resp.text or "").strip()
+            max_output_tokens=500,
+            temperature=0.3,
+            json_mode=False,
+        ).strip()
         return {"reply": reply or "(Keine Antwort erhalten.)", "error": False}
     except Exception as exc:  # noqa: BLE001
         print(f"[ai.ask_assistant] Fehler: {exc}")
         return {
-            "reply": "Der Assistent ist gerade nicht erreichbar. Bitte versuche es erneut.",
+            "reply": "Der Assistent ist gerade ausgelastet. Bitte stelle die Frage gleich nochmal.",
             "error": True,
         }
