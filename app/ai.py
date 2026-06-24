@@ -46,8 +46,8 @@ def _is_retryable(exc: Exception) -> bool:
 
 
 def _model_chain() -> list[str]:
-    """Primärmodell zuerst, danach ein Ausweichmodell (oft weniger ausgelastet)."""
-    chain = [config.GEMINI_MODEL, "gemini-2.0-flash"]
+    """Primärmodell zuerst, danach ein leichteres Ausweichmodell (mehr Gratis-Reserve)."""
+    chain = [config.GEMINI_MODEL, "gemini-2.5-flash-lite"]
     seen, out = set(), []
     for m in chain:
         if m and m not in seen:
