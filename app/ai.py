@@ -47,7 +47,7 @@ def _is_retryable(exc: Exception) -> bool:
 
 def _model_chain() -> list[str]:
     """Primärmodell zuerst, danach ein leichteres Ausweichmodell (mehr Gratis-Reserve)."""
-    chain = [config.GEMINI_MODEL, "gemini-2.5-flash-lite"]
+    chain = [config.GEMINI_MODEL, "gemini-2.5-flash-lite", "gemini-2.5-flash"]
     seen, out = set(), []
     for m in chain:
         if m and m not in seen:
@@ -72,7 +72,7 @@ def _generate(system_instruction: str, contents, max_output_tokens: int,
         max_output_tokens=max_output_tokens,
         response_mime_type="application/json" if json_mode else None,
     )
-    backoff = [1.0, 2.5]  # Sekunden zwischen den Versuchen
+    backoff = [2.0, 5.0]  # Sekunden zwischen den Versuchen (Gratis-Limit braucht Geduld)
     last_exc: Exception | None = None
     for model in _model_chain():
         for attempt in range(len(backoff)):
