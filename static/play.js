@@ -21,7 +21,7 @@ const els = {
   help2Panel: $("help2Panel"), chat: $("chat"), chatInput: $("chatInput"),
   chatSend: $("chatSend"), chatHint: $("chatHint"),
   gameArea: $("gameArea"), endArea: $("endArea"),
-  finalScore: $("finalScore"), finalMeta: $("finalMeta"), finalNote: $("finalNote"),
+  finalScore: $("finalScore"), finalMeta: $("finalMeta"),
   finalBoard: $("finalBoard"), toast: $("toast"),
 };
 
@@ -255,7 +255,6 @@ function renderEnd() {
   const place = me ? me.rank : "–";
   els.finalMeta.textContent =
     `Gesamtzeit: ${Math.round(state.total_time_seconds)}s · Platz ${place} von ${board.length}`;
-  els.finalNote.innerHTML = "<strong>Wusstest du?</strong> " + esc(state.final_note || "");
   els.finalBoard.innerHTML = board.map((r) => {
     const meCls = r.nickname === state.nickname ? ' class="me"' : "";
     return `<tr${meCls}><td class="rank r${r.rank}">${r.rank}</td><td>${esc(r.nickname)}</td>` +

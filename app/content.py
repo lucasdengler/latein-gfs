@@ -25,7 +25,7 @@ SENTENCES = [
     # --------------------------------------------------------------- Satz 1
     {
         "latin": "Erat Miseni classemque imperio praesens regebat.",
-        "solution": "Er war in Misenum und befehligte als persönlich Anwesender die Flotte mit (militärischer) Befehlsgewalt.",
+        "solution": "Er war in Misenum und befehligte als persönlich Anwesender die Flotte mit Befehlsgewalt.",
         "vocab": [
             "erat Miseni → er war in Misenum (Lokativ: Miseni) – Flottenstützpunkt am Golf von Neapel",
             "Misenum, -i n. → Misenum (Hafenstadt am Golf von Neapel)",
@@ -33,11 +33,8 @@ SENTENCES = [
             "imperio (Abl.) → mit der Befehlsgewalt",
         ],
         "grammar": [
-            "„Miseni“ = Lokativ (Ortsangabe bei Städtenamen ohne Präposition; formgleich mit dem Genitiv Sg.): „in Misenum“.",
-            "„praesens“ = prädikatives Partizip im Nom. (auf das Subjekt „er“ bezogen): beschreibt seinen Zustand während der Handlung – „als persönlich Anwesender / persönlich anwesend“.",
-            "„classem-que“: angehängtes -que = „und“; „classem“ = Akk. Sg., Objekt zu „regebat“.",
-            "„imperio“ = Ablativ (instrumenti/modi): „mit (militärischer) Befehlsgewalt“.",
-            "Tempus: „Erat … regebat“ = Imperfekt als Rahmen – dauernder Hintergrund-Zustand, in den die Handlung eingebettet ist.",
+            "„classemque imperio praesens regebat“: „praesens“ = prädikatives Partizip im Nom. – beschreibt den Zustand des Subjekts während der Handlung: „als persönlich Anwesender befehligte er die Flotte mit Befehlsgewalt“. Betont das persönliche Kommando vor Ort.",
+            "Tempus: „Erat Miseni … regebat“ = Imperfekt als Rahmen – dauernder Hintergrund-Zustand, in den die Handlung eingebettet ist.",
         ],
         "free_tip": None,
     },
@@ -65,12 +62,9 @@ SENTENCES = [
             "conspici (Inf. Pass.) → gesehen/betrachtet werden",
         ],
         "grammar": [
-            "AcI nach „indicat“: „nubem … apparere“ = „dass eine Wolke erscheint“ (nubem = Subjektsakkusativ, apparere = Infinitiv) – knappe, indirekte Wiedergabe der Beobachtung.",
-            "„inusitata et magnitudine et specie“ = doppelter Ablativus respectus (Ablativ der Hinsicht): worin die Wolke ungewöhnlich war; „et … et“ = Polysyndeton („sowohl an Größe als auch an Gestalt“); „inusitata“ (Abl. f. Sg.) bezieht sich auf magnitudine/specie.",
-            "„hora fere septima“ = Ablativus temporis („etwa zur 7. Stunde“).",
-            "„locum, ex quo … conspici poterat“ = Relativsatz mit Infinitiv Präsens Passiv: „conspici“ (Inf. Präs. Passiv) hängt von „poterat“ ab – „von der aus … betrachtet werden konnte“.",
-            "„Poscit soleas, ascendit locum“ = historisches Präsens (macht die Szene lebendig) und Asyndeton (kein „und“; zeigt das rasche, entschlossene Handeln).",
-            "Tempus: das historische Präsens (indicat / Poscit / ascendit) holt die entscheidenden Handlungsmomente in die Gegenwart.",
+            "AcI nach „indicat“: „mater mea indicat ei apparere nubem“ (nubem = Akk.-Subjekt, apparere = Infinitiv) = „meine Mutter zeigt ihm an, dass eine Wolke erscheine“ – knappe, indirekte Wiedergabe der Beobachtung.",
+            "„locum, ex quo maxime miraculum illud conspici poterat“ = Relativsatz mit Infinitiv Präsens Passiv: „conspici“ (Inf. Präs. Passiv) hängt von „poterat“ ab – „eine Stelle, von der aus jenes Wunder am besten betrachtet werden konnte“.",
+            "Tempus: historisches Präsens (indicat / Poscit / ascendit) – holt die entscheidenden Handlungsmomente in die Gegenwart und macht sie lebendig.",
         ],
         # GRATIS-TIPP fuer Satz 2: automatisch, OHNE Punktabzug.
         "free_tip": (
@@ -94,7 +88,7 @@ SENTENCES = [
             "alia magis arbor quam pinus expresserit."
         ),
         "solution": (
-            "Eine Wolke – für die aus der Ferne Betrachtenden war unsicher, von "
+            "Eine Wolke – für die aus der Ferne Betrachtenden unsicher, von "
             "welchem Berg (dass es der Vesuv gewesen war, wurde später erkannt) – "
             "stieg auf, deren Ähnlichkeit und Gestalt kein anderer Baum besser "
             "wiedergeben könnte als eine Pinie."
@@ -108,13 +102,9 @@ SENTENCES = [
             "exprimere, -o → ausdrücken, treffend wiedergeben (expresserit: Konj. Pf. – potentialer Konjunktiv)",
         ],
         "grammar": [
-            "Hauptsatz: „Nubes … oriebatur“ = „eine Wolke stieg auf/empor“; „oriebatur“ = Imperfekt, schildert den andauernden Naturvorgang.",
-            "Einschub „incertum (erat) procul intuentibus …“: „incertum“ = Prädikatsnomen („[es war] unsicher“); „intuentibus“ = Dativus iudicantis (Dativ der urteilenden Person), PPA von „intueri“ (Deponens) = „für die aus der Ferne Betrachtenden“.",
-            "„ex quo monte … oriebatur“ = indirekter Fragesatz (abhängig von „incertum“): „von welchem Berg sie aufstieg“.",
-            "„(Vesuvium fuisse postea cognitum est)“ = Parenthese mit AcI im Passiv: „Vesuvium fuisse“ = „dass es der Vesuv gewesen war“ (Inf. Perfekt → Vorzeitigkeit); „cognitum est“ = Passiv („wurde später erkannt“). Trennt den damaligen Eindruck vom späteren Wissen.",
-            "„cuius“ = relativischer Anschluss, Gen. Sg. f. (auf „nubes“): „deren“.",
-            "„non alia magis arbor quam pinus expresserit“ = Potentialis (Konj. Perfekt) im Vergleich „magis … quam“: „kein anderer Baum dürfte sie besser wiedergegeben haben als eine Pinie“ – vorsichtiges Abwägen, trägt die Pinien-Metapher.",
-            "Stilmittel: „similitudinem et formam“ = mögliches Hendiadyoin (zwei fast gleichbedeutende Begriffe für einen Gedanken).",
+            "„(Vesuvium fuisse postea cognitum est)“ = Parenthese mit AcI im Passiv: der AcI „Vesuvium … fuisse“ hängt von „cognitum est“ ab; „fuisse“ (Inf. Perfekt) drückt Vorzeitigkeit aus – „dass es der Vesuv gewesen war, wurde später erkannt“. Trennt den damaligen Eindruck vom späteren Wissen.",
+            "„non alia magis arbor quam pinus expresserit“ = Potentialis (Konj. Perfekt) im Vergleich „magis … quam“: „kein anderer Baum dürfte sie besser wiedergegeben haben als eine Pinie“ – vorsichtiges Abwägen statt Behauptung, trägt die Pinien-Metapher.",
+            "Tempus: „oriebatur“ = Imperfekt für Verlauf/Dauer (schildert den langsam ablaufenden Naturvorgang); „fuisse“ = Vorzeitigkeit (die Erkenntnis liegt nach der Beobachtung).",
         ],
         "free_tip": None,
     },
@@ -127,9 +117,9 @@ SENTENCES = [
         ),
         "solution": (
             "Denn gleichsam auf einem sehr langen Stamm in die Höhe gehoben, "
-            "breitete sie sich in einige Äste aus – ich glaube, weil sie, durch den "
-            "frischen (Luft-)Stoß emporgetragen, dann – als dieser nachließ – im "
-            "Stich gelassen oder auch durch ihr eigenes Gewicht besiegt, sich in die "
+            "breitete sie sich in einige Äste aus, ich glaube, weil sie, durch den "
+            "frischen Luftstoß emporgetragen, dann bei dessen Nachlassen im Stich "
+            "gelassen oder auch durch ihr eigenes Gewicht besiegt, sich in die "
             "Breite verlor."
         ),
         "vocab": [
@@ -149,13 +139,8 @@ SENTENCES = [
             "suo (Abl.) → ihr eigenes (zu pondere)",
         ],
         "grammar": [
-            "„longissimo velut trunco elata in altum“: „velut“ (= „gleichsam wie“) + Ablativ; „elata“ = PPP zu „efferre“ (emporgehoben). Sperrung (Hyperbaton) „longissimo … trunco“ und Superlativ als Hyperbel betonen die Höhe: „gleichsam auf einem sehr langen Stamm in die Höhe gehoben“.",
-            "„elata, evecta, destituta, victa“ = vier PPP im Nom. f. Sg., alle auf „nubes“ bezogen (Partizipienhäufung).",
-            "„senescente eo“ = Ablativus absolutus: „als dieser (= der Luftstoß/spiritus) nachließ“ (Personifikation).",
-            "„recenti spiritu“, „pondere suo“ = Ablative der Ursache: „durch den frischen Stoß“, „durch ihr eigenes Gewicht“.",
-            "„credo“ = parenthetischer Einschub („ich glaube / vermutlich“) – kennzeichnet die folgende Erklärung als Vermutung.",
-            "Stilmittel: Trikolon „recenti spiritu evecta – senescente eo destituta – pondere suo victa“ – rhythmische Steigerung, bildet die drei Phasen (Aufstieg – Nachlassen – Zerfall) nach.",
-            "„in altum“ = „in die Höhe“, „in latitudinem“ = „in die Breite“; „diffundebatur, vanescebat“ = Imperfekt (Verlauf/Dauer des Vorgangs).",
+            "Kausalsatz „quia recenti spiritu evecta … vanescebat“: „senescente eo“ = Ablativus absolutus („als dieser [Luftstoß] nachließ“); „recenti spiritu“ und „pondere suo“ = Ablative der Ursache („durch den frischen Stoß“, „durch ihr eigenes Gewicht“); „evecta, destituta, victa“ = Partizipienhäufung. Die dichte Häufung bildet die Phasen von Aufstieg und Zerfall der Wolke sprachlich nach.",
+            "Tempus: „diffundebatur, vanescebat“ = Imperfekt für Verlauf/Dauer – der andauernde Vorgang des Ausbreitens und Zerfließens.",
         ],
         "free_tip": None,
     },
