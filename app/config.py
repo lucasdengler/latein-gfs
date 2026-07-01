@@ -42,7 +42,7 @@ TIME_TARGET_SECONDS = _int_env("TIME_TARGET_SECONDS", 180)
 # Hilfe-Abzüge.
 HELP1_PENALTY = _int_env("HELP1_PENALTY", 15)        # einmalig pro Satz beim 1. Öffnen
 HELP2_PENALTY = _int_env("HELP2_PENALTY", 10)        # pro gestellter Assistenten-Frage
-HELP2_MAX_QUESTIONS = _int_env("HELP2_MAX_QUESTIONS", 0)  # 0 = unbegrenzt
+HELP2_MAX_QUESTIONS = _int_env("HELP2_MAX_QUESTIONS", 1)  # max. Fragen pro Satz (0 = unbegrenzt)
 
 # Optionaler Abzug pro erneutem "Prüfen" (Wiederholung). Default 0.
 RETRY_PENALTY = _int_env("RETRY_PENALTY", 0)

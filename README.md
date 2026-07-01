@@ -176,7 +176,7 @@ damit QR/Link stimmen, und starte mit `--host 0.0.0.0`.
   kommentiert und zusätzlich per Env-Var überschreibbar:
   `BASE_POINTS_PER_SENTENCE` (100), `PASS_THRESHOLD` (60),
   `TIME_BONUS_MAX` (60), `TIME_TARGET_SECONDS` (180),
-  `HELP1_PENALTY` (15), `HELP2_PENALTY` (10), `HELP2_MAX_QUESTIONS` (0 = unbegrenzt),
+  `HELP1_PENALTY` (15), `HELP2_PENALTY` (10), `HELP2_MAX_QUESTIONS` (1 pro Satz; 0 = unbegrenzt),
   `RETRY_PENALTY` (0).
 - **Text, Musterübersetzung, Vokabeln, Grammatik, Gratis-Tipp:**
   [`app/content.py`](app/content.py). Die Anzahl spielbarer Sätze ergibt sich
