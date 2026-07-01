@@ -103,8 +103,11 @@ EVAL_SYSTEM_PROMPT = (
     "Antworte AUSSCHLIESSLICH als reines JSON, ohne Markdown, ohne weiteren Text:\n"
     '{"quality": <ganze Zahl 0-100>, "passed": <true wenn quality >= '
     + str(config.PASS_THRESHOLD) + ", sonst false>,\n"
-    ' "feedback": "<max. 2 Sätze auf Deutsch; bei Fehlern Hinweis WAS fehlt/falsch ist,\n'
-    ' aber OHNE die richtige Übersetzung zu verraten>"}'
+    ' "feedback": "<auf Deutsch, 2-3 Sätze. Bei Fehlern: sage konkret, WAS falsch '
+    'oder ausgelassen ist, UND gib einen kleinen, ermutigenden Tipp, worauf zu achten '
+    'ist (z. B. Zeitform, Kasus, eine Konstruktion wie AcI oder Abl. abs., ein '
+    'fehlender Satzteil) – aber verrate NIEMALS die richtige Übersetzung bzw. '
+    'Musterlösung. Bei bestandenem Satz: kurzes, positives Feedback.>"}'
 )
 
 

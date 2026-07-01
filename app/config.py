@@ -33,7 +33,7 @@ def _int_env(name: str, default: int) -> int:
 BASE_POINTS_PER_SENTENCE = _int_env("BASE_POINTS_PER_SENTENCE", 100)
 
 # Ab dieser KI-Qualität (in %) gilt ein Satz als bestanden -> Weitergehen erlaubt.
-PASS_THRESHOLD = _int_env("PASS_THRESHOLD", 60)
+PASS_THRESHOLD = _int_env("PASS_THRESHOLD", 50)
 
 # Zeitbonus: maximaler Bonus und Zielzeit (Sekunden) für vollen Bonus bei 0 s.
 TIME_BONUS_MAX = _int_env("TIME_BONUS_MAX", 60)
