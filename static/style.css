@@ -164,6 +164,19 @@ tr.me td { background: #fff7d6; }
 .qr-box img { width: 220px; height: 220px; background: #fff; border-radius: 12px; padding: 8px; }
 .join-link { word-break: break-all; font-weight: 700; }
 
+/* Zwischenmenü / Overlay mit der Musterübersetzung */
+.overlay {
+  position: fixed; inset: 0; z-index: 40;
+  background: rgba(20, 10, 40, .72);
+  display: flex; align-items: center; justify-content: center;
+  padding: 18px;
+}
+.overlay-card {
+  background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 26px; max-width: 640px; width: 100%;
+}
+.overlay-card h2 { margin-top: 0; }
+
 .toast {
   position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
   background: #20143a; color: #fff; padding: 12px 18px; border-radius: 12px;

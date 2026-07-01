@@ -23,7 +23,12 @@ const els = {
   gameArea: $("gameArea"), endArea: $("endArea"),
   finalScore: $("finalScore"), finalMeta: $("finalMeta"),
   finalBoard: $("finalBoard"), toast: $("toast"),
+  solutionOverlay: $("solutionOverlay"), solTitle: $("solTitle"),
+  solLatin: $("solLatin"), solText: $("solText"), solContinue: $("solContinue"),
 };
+
+// True, solange das Musterlösungs-Zwischenmenü offen ist (pausiert den Hintergrund-Abgleich).
+let overlayOpen = false;
 
 function toast(msg) {
   els.toast.textContent = msg;
@@ -241,9 +246,28 @@ els.nextBtn.addEventListener("click", async () => {
   const data = await res.json();
   els.nextBtn.disabled = false;
   if (!res.ok) { toast(data.detail || "Fehler"); return; }
-  state = data.state;
-  render();
+  // Zwischenmenü mit der Musterübersetzung des gerade gelösten Satzes zeigen,
+  // danach erst zum nächsten Satz (bzw. Endbildschirm) weiter.
+  showSolutionInterstitial(data.completed, () => {
+    state = data.state;
+    render();
+  });
 });
+
+// Zwischenmenü: zeigt die Musterübersetzung des abgeschlossenen Satzes.
+function showSolutionInterstitial(completed, onContinue) {
+  if (!completed) { onContinue(); return; }
+  els.solTitle.textContent = `Satz ${completed.number} geschafft! ✓`;
+  els.solLatin.textContent = completed.latin;
+  els.solText.innerHTML = "<strong>Musterübersetzung:</strong> " + esc(completed.solution);
+  overlayOpen = true;
+  els.solutionOverlay.classList.remove("hidden");
+  els.solContinue.onclick = () => {
+    els.solutionOverlay.classList.add("hidden");
+    overlayOpen = false;
+    onContinue();
+  };
+}
 
 function renderEnd() {
   stopTimer();
@@ -269,7 +293,7 @@ loadState();
 // – es wird nur neu gezeichnet, wenn sich Satznummer/Status tatsächlich ändern.
 // Dieser Aufruf nutzt KEINE KI (nur /api/state), kostet also kein Limit.
 setInterval(async () => {
-  if (!state) return;
+  if (!state || overlayOpen) return;   // während des Zwischenmenüs nicht neu zeichnen
   try {
     const res = await fetch("/api/state?token=" + encodeURIComponent(token));
     if (res.status === 401) {

@@ -254,13 +254,22 @@ async def api_check(payload: dict):
 
 @app.post("/api/next")
 async def api_next(payload: dict):
+    from .content import SENTENCES
     p = _auth_player(payload.get("token", ""))
     if not p["current_passed"]:
         raise HTTPException(status_code=400,
                             detail="Aktueller Satz noch nicht bestanden.")
+    # Musterlösung des gerade abgeschlossenen Satzes -> fürs Zwischenmenü.
+    # Wird ERST NACH dem Bestehen ausgeliefert (nie vorher) – kein Schummel-Risiko.
+    completed_idx = p["current_sentence_index"]
+    completed = {
+        "number": completed_idx + 1,
+        "latin": SENTENCES[completed_idx]["latin"],
+        "solution": SENTENCES[completed_idx]["solution"],
+    }
     finished = store.advance(p)
     await notify_admins()
-    return {"finished": finished, "state": player_state_payload(p)}
+    return {"finished": finished, "state": player_state_payload(p), "completed": completed}
 
 
 # ---------------------------------------------------------------------------

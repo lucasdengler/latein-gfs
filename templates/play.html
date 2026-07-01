@@ -97,6 +97,18 @@
     </div>
   </div>
 
+  <!-- Zwischenmenü: Musterübersetzung des gerade gelösten Satzes -->
+  <div id="solutionOverlay" class="overlay hidden">
+    <div class="overlay-card">
+      <h2 id="solTitle">Musterübersetzung</h2>
+      <div class="muted">Lateinischer Satz</div>
+      <div class="latin" id="solLatin" style="font-size:1.15rem"></div>
+      <div class="muted" style="margin-top:14px">Musterübersetzung</div>
+      <div class="feedback ok" id="solText" style="margin-top:6px"></div>
+      <button class="btn primary block" id="solContinue" style="margin-top:18px">Weiter →</button>
+    </div>
+  </div>
+
   <div class="toast" id="toast"></div>
   <script src="/static/play.js"></script>
 </body>
